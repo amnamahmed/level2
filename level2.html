@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Age Prediction App</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e034a, #3b0a59, #2e004f);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: #ddd;
+    }
+
+    .container {
+      background: rgba(40, 0, 60, 0.85);
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow:
+        0 0 15px #7c49a8,
+        0 0 30px #b377ff;
+      text-align: center;
+      width: 350px;
+      animation: fadeIn 0.6s ease-in-out;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      color: #d1b3ff;
+      font-weight: 700;
+      text-shadow: 0 0 8px #bb88ff;
+    }
+
+    input {
+      padding: 12px;
+      width: 80%;
+      border: 2px solid #7c49a8;
+      outline: none;
+      border-radius: 8px;
+      background-color: #3a005c;
+      font-size: 16px;
+      color: #ddd;
+      transition: 0.3s;
+      box-shadow: inset 0 0 6px #8a67b8;
+    }
+
+    input::placeholder {
+      color: #b7a1d8;
+      opacity: 0.7;
+    }
+
+    input:focus {
+      background-color: #4e0079;
+      border-color: #b377ff;
+      box-shadow: 0 0 12px #b377ff;
+      color: #fff;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #7c49a8, #b377ff);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 8px #b377ff;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 18px #d3a9ff, 0 6px 15px rgba(179, 119, 255, 0.6);
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #d1b3ff;
+      background-color: rgba(70, 0, 90, 0.5);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 10px #b377ff;
+      min-height: 50px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔮 Age Prediction App</h1>
+    <form id="ageForm">
+      <input type="text" id="nameInput" placeholder="Enter a name" required />
+      <br />
+      <button type="submit">Predict Age</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('ageForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      let name = document.getElementById('nameInput').value.trim();
+
+      if (name) {
+        fetch(`https://api.agify.io/?name=${name}`)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log({
+              count: data.count,
+              name: data.name,
+              age: data.age,
+            });
+
+            document.getElementById('result').innerHTML = `Name: <strong>${data.name}</strong><br>Predicted Age: <strong>${data.age ?? 'Unknown'}</strong>`;
+          })
+          .catch((error) => {
+            document.getElementById('result').innerHTML = '❌ Error fetching age data.';
+          });
+      }
+    });
+  </script>
+</body>
+</html>
